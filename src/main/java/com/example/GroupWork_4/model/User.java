@@ -1,39 +1,32 @@
 package com.example.GroupWork_4.model;
 
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username")
-})
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
-    private String firstname;
-    private String lastname;
-    @Column(nullable = false,unique = true)
+    private String firstName;
+    private String lastName;
+
+    @Column(nullable = false, unique = true)
     private String username;
 
     private LocalDate birthDate;
 
-    public User(String firstname, String lastname, String username, LocalDate birthDate) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+    // Constructors
+    public User() {}
+    public User(String firstName, String lastName, String username, LocalDate birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.birthDate = birthDate;
     }
-
-    public User() {
-
-    }
-
-
-
 
     public Long getId() {
         return id;
@@ -43,20 +36,20 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getUsername() {
@@ -75,13 +68,12 @@ public class User {
         this.birthDate = birthDate;
     }
 
-
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + firstname + '\'' +
-                ", surname='" + lastname + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", username='" + username + '\'' +
                 ", birthDate=" + birthDate +
                 '}';

@@ -1,6 +1,7 @@
 package com.example.GroupWork_4.repository;
 
 import com.example.GroupWork_4.model.Comment;
+import com.example.GroupWork_4.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

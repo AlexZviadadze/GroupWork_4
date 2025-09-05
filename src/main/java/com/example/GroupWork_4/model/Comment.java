@@ -3,33 +3,23 @@ package com.example.GroupWork_4.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "comments")
 public class Comment {
-
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,length = 299)
     private String text;
+    private Long postId;
+    private String createdByUsername;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User author;
-
-    public Comment() {
+    // Constructors
+    public Comment() {}
+    public Comment(String text, Long postId, String createdByUsername) {
+        this.text = text;
+        this.postId = postId;
+        this.createdByUsername = createdByUsername;
     }
 
-    public Comment(String text, Post post1, User user1) {
-        this.text= text;
-        this.post = post1;
-        this.author = user1;
-
-    }
 
     public Long getId() {
         return id;
@@ -47,30 +37,29 @@ public class Comment {
         this.text = text;
     }
 
-    public Post getPost() {
-        return post;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
-    public User getAuthor() {
-        return author;
+    public String getCreatedByUsername() {
+        return createdByUsername;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setCreatedByUsername(String createdByUsername) {
+        this.createdByUsername = createdByUsername;
     }
-
 
     @Override
     public String toString() {
         return "Comment{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
-                ", author=" + (author != null ? author.getUsername() : "null") +
-                ", postId=" + (post != null ? post.getId() : "null") +
+                ", postId=" + postId +
+                ", createdByUsername='" + createdByUsername + '\'' +
                 '}';
     }
 }

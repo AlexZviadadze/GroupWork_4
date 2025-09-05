@@ -3,58 +3,50 @@ package com.example.GroupWork_4.service;
 import com.example.GroupWork_4.model.Post;
 import com.example.GroupWork_4.model.User;
 import com.example.GroupWork_4.repository.PostRepository;
-import org.springframework.stereotype.Service;
+import com.example.GroupWork_4.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
-@Service
-public class PostService {
+    @Service
+    public class PostService {
 
-    private  final PostRepository postRepository;
-    private  final AuthService authService;
+        private final PostRepository postRepo;
+        private final UserRepository userRepo;
 
-    public  PostService(PostRepository postRepository, AuthService authService){
-        this.postRepository = postRepository;
-        this.authService = authService;
-    }
-
-    public Post createPost(String username, String text){
-        User author = authService.validateUser(username);
-        Post post = new Post();
-        post.setText(text);
-        post.setAuthor(author);
-        return  postRepository.save(post);
-    }
-
-    public void deletePost(String username, Long postId) {
-        User user = authService.validateUser(username);
-        Post post = postRepository.findById(postId).orElseThrow();
-        if (!post.getAuthor().equals(user)) {
-            throw new RuntimeException("Cannot delete another user's post");
+        public PostService(PostRepository postRepo, UserRepository userRepo) {
+            this.postRepo = postRepo;
+            this.userRepo = userRepo;
         }
-        postRepository.delete(post);
-    }
 
-    public Post updatePost(String username, Long postId, String newText) {
-        User user = authService.validateUser(username);
-        Post post = postRepository.findById(postId).orElseThrow();
-        if (!post.getAuthor().equals(user)) {
-            throw new RuntimeException("Cannot edit another user's post");
+        public Post createPost(User user, String text) {
+            Post post = new Post(user.getUsername(), text);
+            return postRepo.save(post);
         }
-        post.setText(newText);
-        return postRepository.save(post);
-    }
 
-    public Page<Post> getAllPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
-    }
+        public Post updatePost(Long postId, String username, String newText) {
+            Post post = postRepo.findById(postId)
+                    .orElseThrow(() -> new RuntimeException("Post not found!"));
 
-    public Page<Post> getUserPosts(String username, Pageable pageable) {
-        return (Page<Post>) postRepository.findByAuthorUsername(username, pageable);
-    }
 
-    public Post getPostById(Long postId) {
-        return postRepository.findById(postId).orElseThrow();
+
+            post.setText(newText);
+            return postRepo.save(post);
+        }
+
+        public Post getPostById(Long id) {
+            return postRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Post not found!"));
+        }
+
+        public List<Post> getAllPosts(Pageable pageable) {
+            return postRepo.findAll(pageable).getContent();
+        }
+
+        public List<Post> getPostsByUser(String username) {
+            return postRepo.findByCreatedByUsername(username);
+        }
     }
-}

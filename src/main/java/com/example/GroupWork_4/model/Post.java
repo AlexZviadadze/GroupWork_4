@@ -3,27 +3,20 @@ package com.example.GroupWork_4.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "posts")
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 999)
     private String text;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private  User author;
+    private String createdByUsername;
 
-    public Post(String text, User user) {
-        this.text=text;
-        this.author = user;
-    }
-
-    public Post() {
-
+    // Constructors
+    public Post() {}
+    public Post(String text, String createdByUsername) {
+        this.text = text;
+        this.createdByUsername = createdByUsername;
     }
 
     public Long getId() {
@@ -42,21 +35,20 @@ public class Post {
         this.text = text;
     }
 
-    public User getAuthor() {
-        return author;
+    public String getCreatedByUsername() {
+        return createdByUsername;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setCreatedByUsername(String createdByUsername) {
+        this.createdByUsername = createdByUsername;
     }
-
 
     @Override
     public String toString() {
         return "Post{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
-                ", author=" + (author != null ? author.getUsername() : "null") +
+                ", createdByUsername='" + createdByUsername + '\'' +
                 '}';
     }
 }
